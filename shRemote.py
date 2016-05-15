@@ -3,11 +3,17 @@ from fabric.api import hide, run, env, put
 from fabric.tasks import execute
 from fabric import state
 
-import os, time, datetime, Tkinter as tk,tkFileDialog, argparse
+import os, time, datetime, Tkinter as tk,tkFileDialog, argparse, ConfigParser
 from getpass import getpass
 
-ScriptPath = ''
-DEFAULT_AUTHORIZE = True
+config=ConfigParser.ConfigParser()
+config.read('shRemote.cfg')
+
+DEFAULT_SCRIPT = config.get('shRemote-Configuration','DEFAULT_SCRIPT')
+DEFAULT_PASSWORD = config.get('shRemote-Configuration','DEFAULT_PASSWORD')
+DEFAULT_HOSTS = config.get('shRemote-Configuration','DEFAULT_HOSTS')
+DEFAULT_USER = config.get('shRemote-Configuration','DEFAULT_USER')
+DEFAULT_AUTHORIZE = config.get('shRemote-Configuration','DEFAULT_AUTHORIZE')
 
 def getInstanceString():
     string = "##-- shRemote.py by Adam Clemons --"
@@ -19,7 +25,7 @@ def getInstanceString():
 
 def getFilename():
     file_opt = options = {}
-    options['filetypes'] = [('all files', '.*'), ('shell script', '.sh')]
+    options['filetypes'] = [ ('shell script', '.sh'), ('all files', '.*')]
     options['initialdir'] = os.getcwd()
     options['parent'] = tk.Frame()
     options['title'] = 'select a shell script source file: '
@@ -38,13 +44,12 @@ def writeFile(filename, content):
     outFile.close()
 
 def authorize():
-    if !DEFAULT_AUTHORIZE:
-        env.password = getpass("Enter your password for %s" % env.host_string)
+    if DEFAULT_AUTHORIZE:
+        env.password = DEFAULT_PASSWORD
     else:
-        env.password = 'raspberry'
-    pass
-
-def deploySh(filepath=ScriptPath):
+        env.password = getpass("Enter your password for %s" % env.host_string)
+    
+def deploySh(filepath=DEFAULT_SCRIPT):
     # split file name seperately
     path, filename=os.path.split(filepath)
     authorize()
@@ -59,7 +64,7 @@ if __name__=='__main__':
     parser.add_argument('--hosts', dest='hosts', required=False)
     parser.add_argument('--username',dest='user',required=False)
     parser.add_argument('--script',dest='script',required=False)
-    parser.add_argument('--pass',dest='pass',required=False)
+    parser.add_argument('--pass',dest='password',required=False)
     # Parse args
     args=parser.parse_args()
     
@@ -68,7 +73,7 @@ if __name__=='__main__':
         # TODO: make this parse correctly into an array
         env.hosts = args.hosts
     else:
-        env.hosts = ['raspberrypi', '192.168.1.85']
+        env.hosts = DEFAULT_HOSTS
         print("Using Default Hosts:")
         print(env.hosts)
         print("use --hosts hostname1,hostname2 to specify")
@@ -77,14 +82,12 @@ if __name__=='__main__':
         env.user = args.user
     else:
         # env.user=os.getenv('username')
-        env.user='pi'
+        env.user=DEFAULT_USER
         print("Using default username pi")
         
     
-    if args.pass != None:
-        env.password = args.pass
-    else:
-        
+    if args.password != None:
+        env.password = args.password
         
     if args.script != None:
         ScriptPath = args.script
