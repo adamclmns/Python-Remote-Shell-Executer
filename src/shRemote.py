@@ -3,7 +3,7 @@ from fabric.api import hide, run, env, put
 from fabric.tasks import execute
 from fabric import state
 
-import os, time, datetime, Tkinter as tk,tkFileDialog, argparse, ConfigParser
+import os, time, datetime, Tkinter as tk, tkFileDialog, argparse, ConfigParser
 from getpass import getpass
 
 config=ConfigParser.ConfigParser()
@@ -30,7 +30,7 @@ def getFilename():
     options['parent'] = tk.Frame()
     options['title'] = 'select a shell script source file: '
     filepath=tkFileDialog.askopenfilename(**file_opt)
-    
+
     return filepath
 
 def writeFile(filename, content):
@@ -48,7 +48,7 @@ def authorize():
         env.password = DEFAULT_PASSWORD
     else:
         env.password = getpass("Enter your password for %s" % env.host_string)
-    
+
 def deploySh(filepath=DEFAULT_SCRIPT):
     # split file name seperately
     path, filename=os.path.split(filepath)
@@ -58,7 +58,7 @@ def deploySh(filepath=DEFAULT_SCRIPT):
     writeFile('output', out)
 
 if __name__=='__main__':
-    
+
     #Command line params for fun
     parser = argparse.ArgumentParser(description="executes shell scripts remotely over ssh")
     parser.add_argument('--hosts', dest='hosts', required=False)
@@ -67,33 +67,34 @@ if __name__=='__main__':
     parser.add_argument('--pass',dest='password',required=False)
     # Parse args
     args=parser.parse_args()
-    
+
     # Check if Arguments provided, if so, Apply the argument, else apply default or ask
     if args.hosts != None:
-        # TODO: make this parse correctly into an array
-        env.hosts = args.hosts
+        hostList = args.hosts.split(',')
+        env.hosts = hostList
+        print(env.hosts)
     else:
         env.hosts = DEFAULT_HOSTS
         print("Using Default Hosts:")
         print(env.hosts)
         print("use --hosts hostname1,hostname2 to specify")
-    
+
     if args.user != None:
         env.user = args.user
     else:
         # env.user=os.getenv('username')
         env.user=DEFAULT_USER
         print("Using default username pi")
-        
-    
+
+
     if args.password != None:
         env.password = args.password
-        
+
     if args.script != None:
         ScriptPath = args.script
     else:
         ScriptPath = getFilename()
-    
+
     # Make the Magic Happen
     with hide('output'):
         execute(deploySh)
