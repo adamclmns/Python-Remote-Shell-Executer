@@ -27,10 +27,11 @@ def getFilename():
     file_opt = options = {}
     options['filetypes'] = [ ('shell script', '.sh'), ('all files', '.*')]
     options['initialdir'] = os.getcwd()
-    options['parent'] = tk.Frame()
+    frame =  tk.Frame()
+    options['parent'] = frame
     options['title'] = 'select a shell script source file: '
     filepath=tkFileDialog.askopenfilename(**file_opt)
-
+    frame.destroy()
     return filepath
 
 def writeFile(filename, content):

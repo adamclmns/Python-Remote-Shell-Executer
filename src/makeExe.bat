@@ -1,1 +1,1 @@
-pyinstaller --exclude-module config --clean --onefile -d --windowed shRemote.py
+pyinstaller --exclude-module config --clean --onefile  shRemote.py
