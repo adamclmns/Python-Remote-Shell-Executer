@@ -1,4 +1,5 @@
-# Adam Clemons -  proof of concept
+# Adam Clemons -  slightly-refined, but still rough, proof of concept
+#
 from fabric.api import hide, run, env, put
 from fabric.tasks import execute
 from fabric import state
@@ -14,8 +15,13 @@ DEFAULT_PASSWORD = config.get('shRemote-Configuration','DEFAULT_PASSWORD')
 DEFAULT_HOSTS = config.get('shRemote-Configuration','DEFAULT_HOSTS')
 DEFAULT_USER = config.get('shRemote-Configuration','DEFAULT_USER')
 DEFAULT_AUTHORIZE = config.get('shRemote-Configuration','DEFAULT_AUTHORIZE')
+ScriptPath = DEFAULT_SCRIPT # so this is never null or empty, and initialized with a good value out-of-the-box
 
 def getInstanceString():
+    '''
+        This just creates a string that can be inserted into the output file so
+        you can easily tell where each result set is coming from
+    '''
     string = "##-- shRemote.py by Adam Clemons --"
     string += env.host_string
     string += '-'
@@ -24,6 +30,9 @@ def getInstanceString():
     return string
 
 def getFilename():
+    '''
+        this will get a filename using Tkinter browse dialoge
+    '''
     file_opt = options = {}
     options['filetypes'] = [ ('shell script', '.sh'), ('all files', '.*')]
     options['initialdir'] = os.getcwd()
@@ -35,6 +44,9 @@ def getFilename():
     return filepath
 
 def writeFile(filename, content):
+    '''
+        this writes some given content to a given filename in binary append mode
+    '''
     # wb - write binary, truncates file before writing
     # ab - append binary
     # binary will keep original line endings, and not make the file look ugly in notepad++
@@ -45,6 +57,9 @@ def writeFile(filename, content):
     outFile.close()
 
 def authorize():
+    '''
+        gets a pasword, from default Config if DEFAULT_AUTHORIZE=TRUE, or from the terminal DEFAULT_AUTHORIZE=FALSE
+    '''
     if DEFAULT_AUTHORIZE:
         env.password = DEFAULT_PASSWORD
     else:
@@ -60,14 +75,21 @@ def deploySh(filepath=ScriptPath):
 
 if __name__=='__main__':
 
-    #Command line params for fun
+    #Command line params, because the UI isn't designed yet
     parser = argparse.ArgumentParser(description="executes shell scripts remotely over ssh")
     parser.add_argument('--hosts', dest='hosts', required=False)
     parser.add_argument('--username',dest='user',required=False)
     parser.add_argument('--script',dest='script',required=False)
     parser.add_argument('--pass',dest='password',required=False)
+    # adding short-hand arguments for convinence.
+    parser.add_argument('-h', dest='hosts', required=False)
+    parser.add_argument('-u',dest='user',required=False)
+    parser.add_argument('-s',dest='script',required=False)
+    parser.add_argument('-p',dest='password',required=False)
+    # TODO: add a -? --help command switch to print the help documentation (maybe a new module/resource in the package?)
+
     # Parse args
-    args=parser.parse_args()
+    args = parser.parse_args()
 
     # Check if Arguments provided, if so, Apply the argument, else apply default or ask
     if args.hosts != None:
@@ -86,7 +108,6 @@ if __name__=='__main__':
         # env.user=os.getenv('username')
         env.user=DEFAULT_USER
         print("Using default username pi")
-
 
     if args.password != None:
         env.password = args.password
