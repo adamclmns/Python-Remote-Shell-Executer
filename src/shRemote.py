@@ -50,7 +50,7 @@ def authorize():
     else:
         env.password = getpass("Enter your password for %s" % env.host_string)
 
-def deploySh(filepath=DEFAULT_SCRIPT):
+def deploySh(filepath=ScriptPath):
     # split file name seperately
     path, filename=os.path.split(filepath)
     authorize()
@@ -94,7 +94,7 @@ if __name__=='__main__':
     if args.script != None:
         ScriptPath = args.script
     else:
-        ScriptPath = getFilename()
+        ScriptPath = DEFAULT_SCRIPT
 
     # Make the Magic Happen
     with hide('output'):
