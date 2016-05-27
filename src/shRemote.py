@@ -61,11 +61,14 @@ def authorize():
         gets a pasword, from default Config if DEFAULT_AUTHORIZE=TRUE, or from the terminal DEFAULT_AUTHORIZE=FALSE
     '''
     if DEFAULT_AUTHORIZE:
-        env.password = DEFAULT_PASSWORD
-    else:
         env.password = getpass("Enter your password for %s" % env.host_string)
+    else:
+        env.password = DEFAULT_PASSWORD
 
 def deploySh(filepath=ScriptPath):
+    '''
+        Copies a script to the destination host at the current user's home directory
+    '''
     # split file name seperately
     path, filename=os.path.split(filepath)
     authorize()
@@ -82,7 +85,6 @@ if __name__=='__main__':
     parser.add_argument('--script',dest='script',required=False)
     parser.add_argument('--pass',dest='password',required=False)
     # adding short-hand arguments for convinence.
-    parser.add_argument('-h', dest='hosts', required=False)
     parser.add_argument('-u',dest='user',required=False)
     parser.add_argument('-s',dest='script',required=False)
     parser.add_argument('-p',dest='password',required=False)
