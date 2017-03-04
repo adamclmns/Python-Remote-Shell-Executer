@@ -1,2 +1,2 @@
 conda env create -f shRemote.yml
-activate shRemote
+activate C:\Anaconda3\envs\shRemote

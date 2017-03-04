@@ -69,7 +69,7 @@ def deploySh(filepath=ScriptPath):
     # split file name seperately
     path, filename=os.path.split(filepath)
     authorize()
-    put(filepath, '~/'+filename, mode=0775)
+    put(filepath, '~/'+filename, mode=775)
     out = run('~/'+filename)
     writeFile('output', out)
 
@@ -82,7 +82,8 @@ if __name__=='__main__':
     parser.add_argument('--script',dest='script',required=False)
     parser.add_argument('--pass',dest='password',required=False)
     # adding short-hand arguments for convinence.
-    parser.add_argument('-h', dest='hosts', required=False)
+    # BUG With this line
+    # parser.add_argument('-s', dest='server', required=False)
     parser.add_argument('-u',dest='user',required=False)
     parser.add_argument('-s',dest='script',required=False)
     parser.add_argument('-p',dest='password',required=False)
