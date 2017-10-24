@@ -1,5 +1,18 @@
-# Adam Clemons -  slightly-refined, but still rough, proof of concept
-#
+# Adam Clemons - Code that needs a good refactoring and re-design. 
+# TODO: Add DocStrings
+# TODO: Add Generic functionality for upload and run command
+# TODO: Remove UI components
+# TODO: Use Constants for Config names/sections
+# TODO: Look at alternative to ConfigParser. 
+# TODO: First Setup Wizard (Conditionally imported for performance)
+# TODO: Add quick-commands to Python_HOME/Scripts/ directory for easy access
+# BUG: Doesn't run in Python3 properly.
+# BUG: Dependencies are incomplete/wrong for python3
+# BUG: Need python2/Python3 Requirements.txt and PyInstaller script for each
+# TODO: Unit Tests for various functions. Will use Raspberry Pi via OTG for testing
+# TODO: Test on something other than Windows.
+# TODO: Add Git Support (for deploying code from git to ssh host and run post-clone commands)
+
 from fabric.api import hide, run, env, put
 from fabric.tasks import execute
 from fabric import state
@@ -9,12 +22,12 @@ from getpass import getpass
 
 config=configparser.ConfigParser()
 config.read('shRemote.cfg')
-
-DEFAULT_SCRIPT = config.get('DEFAULT','DEFAULT_SCRIPT')
-DEFAULT_PASSWORD = config.get('DEFAULT','DEFAULT_PASSWORD')
-DEFAULT_HOSTS = config.get('DEFAULT','DEFAULT_HOSTS')
-DEFAULT_USER = config.get('DEFAULT','DEFAULT_USER')
-DEFAULT_AUTHORIZE = config.get('DEFAULT','DEFAULT_AUTHORIZE')
+# TODO: Fix this, the API has changed
+DEFAULT_SCRIPT = config.get('shRemoteConfiguration','DEFAULT_SCRIPT')
+DEFAULT_PASSWORD = config.get('shRemoteConfiguration','DEFAULT_PASSWORD')
+DEFAULT_HOSTS = config.get('shRemoteConfiguration','DEFAULT_HOSTS')
+DEFAULT_USER = config.get('shRemoteConfiguration','DEFAULT_USER')
+DEFAULT_AUTHORIZE = config.get('shRemoteConfiguration','DEFAULT_AUTHORIZE')
 ScriptPath = DEFAULT_SCRIPT # so this is never null or empty, and initialized with a good value out-of-the-box
 
 def getInstanceString():
@@ -31,6 +44,7 @@ def getInstanceString():
 
 def getFilename():
     '''
+        TODO: Remove this in favor of CLI interface. 
         this will get a filename using Tkinter browse dialoge
     '''
     file_opt = options = {}
@@ -45,6 +59,7 @@ def getFilename():
 
 def writeFile(filename, content):
     '''
+        TODO: Optionally pipe output to the terminal
         this writes some given content to a given filename in binary append mode
     '''
     # wb - write binary, truncates file before writing
@@ -66,6 +81,7 @@ def authorize():
         env.password = getpass("Enter your password for %s" % env.host_string)
 
 def deploySh(filepath=ScriptPath):
+    # TODO: Genericise this to any code file.
     # split file name seperately
     path, filename=os.path.split(filepath)
     authorize()
@@ -106,6 +122,7 @@ if __name__=='__main__':
     if args.user != None:
         env.user = args.user
     else:
+        # TODO: Give user the option to use their System Username
         # env.user=os.getenv('username')
         env.user=DEFAULT_USER
         print("Using default username pi")
@@ -116,7 +133,7 @@ if __name__=='__main__':
     if args.script != None:
         ScriptPath = args.script
     else:
-        ScriptPath = DEFAULT_SCRIPT
+        ScriptPath = DEFAULT_SCRIPT #TODO: BUG: There's a gitHub issue related to this line. 
 
     # Make the Magic Happen
     with hide('output'):
