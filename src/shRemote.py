@@ -4,10 +4,10 @@ from fabric.api import hide, run, env, put
 from fabric.tasks import execute
 from fabric import state
 
-import os, time, datetime, Tkinter as tk, tkFileDialog, argparse, ConfigParser
+import os, time, datetime, tkinter as tk, tkinter.filedialog, argparse, configparser
 from getpass import getpass
 
-config=ConfigParser.ConfigParser()
+config=configparser.ConfigParser()
 config.read('shRemote.cfg')
 
 DEFAULT_SCRIPT = config.get('shRemote-Configuration','DEFAULT_SCRIPT')
@@ -39,7 +39,7 @@ def getFilename():
     frame =  tk.Frame()
     options['parent'] = frame
     options['title'] = 'select a shell script source file: '
-    filepath=tkFileDialog.askopenfilename(**file_opt)
+    filepath=tkinter.filedialog.askopenfilename(**file_opt)
     frame.destroy()
     return filepath
 
