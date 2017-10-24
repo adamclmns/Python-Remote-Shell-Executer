@@ -16,3 +16,11 @@ You can use Notepad++ or Atom to fix the line endings. See the respective docume
 Requires Python 2.7 x86 and Fabric module. You can also just use the provided conda Env file with miniconda for windows (any version should work)
 
 NOTE: this is an unfinished project. Features are incomplete.
+
+
+Background:
+  In a previous job, I would write bash scripts that would search logs for certain errors or messages for troubleshooting production environments. Some of these scripts would get way too long for a one-liner, and often they needed to be run against 8 or more servers. 
+  
+  To make running the script on a set of servers easier, I created this tool.
+  Now, as I dive deeper into raspberry pi, I'm finding that I need to upload and run python code over ssh, and this tool will be extended to upload any file and execute any command, with a few specific short-cut commands for running python scripts on a remote host and pipe the output back to a terminal. 
+  
