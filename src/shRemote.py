@@ -10,11 +10,11 @@ from getpass import getpass
 config=configparser.ConfigParser()
 config.read('shRemote.cfg')
 
-DEFAULT_SCRIPT = config.get('shRemote-Configuration','DEFAULT_SCRIPT')
-DEFAULT_PASSWORD = config.get('shRemote-Configuration','DEFAULT_PASSWORD')
-DEFAULT_HOSTS = config.get('shRemote-Configuration','DEFAULT_HOSTS')
-DEFAULT_USER = config.get('shRemote-Configuration','DEFAULT_USER')
-DEFAULT_AUTHORIZE = config.get('shRemote-Configuration','DEFAULT_AUTHORIZE')
+DEFAULT_SCRIPT = config.get('DEFAULT','DEFAULT_SCRIPT')
+DEFAULT_PASSWORD = config.get('DEFAULT','DEFAULT_PASSWORD')
+DEFAULT_HOSTS = config.get('DEFAULT','DEFAULT_HOSTS')
+DEFAULT_USER = config.get('DEFAULT','DEFAULT_USER')
+DEFAULT_AUTHORIZE = config.get('DEFAULT','DEFAULT_AUTHORIZE')
 ScriptPath = DEFAULT_SCRIPT # so this is never null or empty, and initialized with a good value out-of-the-box
 
 def getInstanceString():
