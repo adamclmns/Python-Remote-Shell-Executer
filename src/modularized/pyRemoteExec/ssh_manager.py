@@ -15,10 +15,6 @@ class SSHManager():
         env.user = user
         env.password = getpass()
         
-
-    def _authorize():
-        pass
-
     def _deployFile(filepath):
         path, filename = os.path.split(filepath)
         put(filepath, '~/' + filename, mode=775)
@@ -27,4 +23,4 @@ class SSHManager():
     def _deployDirectory():
         pass
 
-    
+    def 
