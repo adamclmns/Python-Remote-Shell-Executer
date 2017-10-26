@@ -23,4 +23,5 @@ class SSHManager():
     def _deployDirectory():
         pass
 
-    def 
+    def runCommand(commandString):
+        pass
